@@ -3,8 +3,15 @@ package bankapp;
 public class BankAccount {
 	
 	private double balance;
+	private String accountName = "";
 	
-	//Constructors - not tested
+	// Constructor with an account name
+	public BankAccount(String name) {
+		this.accountName = name;
+		this.balance = 0;
+	}
+	
+	// Constructor without an account name
 	public BankAccount() {
 		this.balance = 0;
 	}
