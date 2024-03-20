@@ -56,6 +56,8 @@ public class BankAccount {
 	    return new BankAccount(null);
 	}
 	
+	// TODO: a bankaccount shouldnt see other accounts, this should be 
+	// a banker focused feature
 	public Set<String> getAllAccountNames() {
 		return allAccountNames;
 	}
