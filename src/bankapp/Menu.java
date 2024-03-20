@@ -25,6 +25,10 @@ public class Menu {
 	public void displayingOptions() {
 		System.out.println("How much money do you want to deposit?");
 	}
+<<<<<<< HEAD
+=======
+
+>>>>>>> deposit
 	
 	//Code that gets user input
 	//No tests needed...for now (probably discuss in future class)
@@ -33,7 +37,11 @@ public class Menu {
 		while(amount < 0) {
 			System.out.println("Invalid value!");
 			System.out.println("How much money do you want to deposit?");
+<<<<<<< HEAD
 			amount = in.nextDouble();
+=======
+			amount = in.nextDouble();	
+>>>>>>> deposit
 		}
 		return amount;
 	}
@@ -41,7 +49,11 @@ public class Menu {
 	//Does work - needs tests
 	public void processingUserSelection(double amount) {
 		account.deposit(amount);
+<<<<<<< HEAD
 		System.out.println("Your balance is now: " + account.getBalance());
+=======
+		System.out.println("Your balance is: $" + account.getBalance());
+>>>>>>> deposit
 	}
 	
 	public BankAccount getAccount() {
