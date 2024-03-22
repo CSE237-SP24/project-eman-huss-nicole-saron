@@ -6,26 +6,26 @@ public class Menu {
 
 	private Scanner in;
 	private BankAccount account;
-	
+
 	//not tested
 	public static void main(String[] args) {
 		Menu mainMenu = new Menu();
 		mainMenu.displayingOptions();
 		double amount = mainMenu.getValidUserInput();
-		mainMenu.processingUserSelection(amount);
+		mainMenu.processingUserSelection1(amount);
 	}
-	
+
 	//Constructor
 	public Menu() {
 		this.in = new Scanner(System.in);
 		this.account = new BankAccount();
 	}
-	
+
 	//Code that just displays stuff - no tests needed
 	public void displayingOptions() {
 		System.out.println("How much money do you want to deposit?");
 	}
-	
+
 	//Code that gets user input
 	//No tests needed...for now (probably discuss in future class)
 	public double getValidUserInput() {
@@ -37,13 +37,32 @@ public class Menu {
 		}
 		return amount;
 	}
-	
+
+	//MEEEE
+
+	//selection1 ??
+	public void processingUserSelection1(double amount) {
+		int choice = in.nextInt();
+		account.deposit(amount);
+		System.out.println("Deposit successful. Your balance is now: " + account.getBalance());
+	}
+
+	public void withdraw(double amount) {
+		try {
+			account.withdraw(amount);
+			System.out.println("Withdrawal successful. Your balance is now: " + account.getBalance());
+		} catch (IllegalArgumentException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	///eeeend
+
 	//Does work - needs tests
 	public void processingUserSelection(double amount) {
 		account.deposit(amount);
 		System.out.println("Your balance is now: " + account.getBalance());
 	}
-	
+
 	public BankAccount getAccount() {
 		return account;
 	}
