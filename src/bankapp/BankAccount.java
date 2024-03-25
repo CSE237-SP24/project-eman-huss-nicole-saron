@@ -30,7 +30,7 @@ public class BankAccount {
 		return this.accountName;
 	}
 
-	protected double getBalance() {
+	public double getBalance() {
 		return this.balance;
 	}
 
