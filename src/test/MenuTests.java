@@ -18,10 +18,6 @@ class MenuTests {
 		BankAccount account = m.getAccount();
 		assertEquals(50, account.getBalance(), 0.01);
 	}
-<<<<<<< HEAD
-=======
-
->>>>>>> 734ecceec86d0574541f355514df568fff91e9a8
 	
 	@Test
 	void testMultipleUserDeposit() {
@@ -35,8 +31,4 @@ class MenuTests {
 		assertEquals(190, account.getBalance(), 0.01);
 	}
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 734ecceec86d0574541f355514df568fff91e9a8
 }

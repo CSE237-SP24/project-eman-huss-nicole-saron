@@ -17,19 +17,15 @@ public class Menu {
 	
 	//Constructor
 	public Menu() {
+		System.out.println("Enter your name:");
 		this.in = new Scanner(System.in);
-		this.account = new BankAccount();
+		this.account = BankAccount.createAccount("in");
 	}
 	
 	//Code that just displays stuff - no tests needed
 	public void displayingOptions() {
 		System.out.println("How much money do you want to deposit?");
 	}
-<<<<<<< HEAD
-=======
-
->>>>>>> deposit
-	
 	//Code that gets user input
 	//No tests needed...for now (probably discuss in future class)
 	public double getValidUserInput() {
@@ -37,11 +33,7 @@ public class Menu {
 		while(amount < 0) {
 			System.out.println("Invalid value!");
 			System.out.println("How much money do you want to deposit?");
-<<<<<<< HEAD
 			amount = in.nextDouble();
-=======
-			amount = in.nextDouble();	
->>>>>>> deposit
 		}
 		return amount;
 	}
@@ -49,11 +41,7 @@ public class Menu {
 	//Does work - needs tests
 	public void processingUserSelection(double amount) {
 		account.deposit(amount);
-<<<<<<< HEAD
-		System.out.println("Your balance is now: " + account.getBalance());
-=======
-		System.out.println("Your balance is: $" + account.getBalance());
->>>>>>> deposit
+		System.out.println("Your balance now is: $" + account.getBalance());
 	}
 	
 	public BankAccount getAccount() {
