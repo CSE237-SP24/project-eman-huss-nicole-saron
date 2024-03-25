@@ -35,5 +35,30 @@ class BankAccountTests {
 			assertTrue(true);
 		}
 	}
+	@Test
+	void testTransfer() {
+		BankAccount sendingAccount = new BankAccount();
+		BankAccount receivingAccount = new BankAccount();
+		
+		sendingAccount.deposit(200);
+		sendingAccount.transfer(receivingAccount, 100);
+		
+		assertEquals(100, sendingAccount.getBalance(), 0.01);	
+		assertEquals(100, receivingAccount.getBalance(), 0.01);	
+		
+		
+	}
+	void testTransferMaxOut() {
+		BankAccount sendingAccount = new BankAccount();
+		BankAccount receivingAccount = new BankAccount();
+		
+		sendingAccount.deposit(200);
+		sendingAccount.transfer(receivingAccount, 100);
+		
+		assertEquals(100, sendingAccount.getBalance(), 0.01);	
+		assertEquals(100, receivingAccount.getBalance(), 0.01);	
+		
+		
+	}
 
 }

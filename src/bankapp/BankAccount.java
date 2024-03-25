@@ -16,6 +16,16 @@ public class BankAccount {
 		}
 		this.balance += amount;
 	}
+	public void transfer(BankAccount receivingAccount, double amount) {
+		if(amount < 0) {
+			throw new IllegalArgumentException("Amount must be positive");
+		} 
+		if(amount > this.balance) {
+			throw new IllegalArgumentException("You are overdrafting your account. Your balance is: " + this.balance + ". Please transfer an amount less than or equal to your balance.");
+		}
+		this.balance = this.balance - amount;
+		receivingAccount.balance += amount;
+	}
 	
 	//getters and setters - not tested
 	public double getBalance() {
