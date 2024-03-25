@@ -2,29 +2,35 @@ package test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import bankapp.BankAccount;
 
 class BankAccountTests {
 
+	@BeforeEach
+	void setUp() {
+		BankAccount testAccount = BankAccount.createAccount("TestAccount");
+		BankAccount testAccount2 = BankAccount.createAccount("TestAccount2");
+	}
+	
 	@Test
 	void testSimpleDeposit() {
 		//1. Setup Objects
-		
-		BankAccount testAccount = new BankAccount();
+		BankAccount johnAccount = BankAccount.createAccount("John");
 		
 		//2. Call the method being tested
-		testAccount.deposit(25);
+		johnAccount.deposit(25);
 		
 		//3. Use assertions to verify results
-		assertEquals(25.0, testAccount.getBalance(), 0.01);	
+		assertEquals(25.0, johnAccount.getBalance(), 0.01);	
 	}
 	
 	@Test
 	void testNegativeDeposit() {
 		//1. Setup Objects	
-		BankAccount testAccount = new BankAccount();
+		BankAccount testAccount = BankAccount.createAccount();
 		
 		//2. Call the method being tested
 		try {

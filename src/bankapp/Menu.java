@@ -31,15 +31,15 @@ public class Menu {
 
 	//Constructor
 	public Menu() {
+		System.out.println("Enter your name:");
 		this.in = new Scanner(System.in);
-		this.account = new BankAccount();
+		this.account = BankAccount.createAccount("in");
 	}
 	
 	//Code that just displays stuff - no tests needed
 	public void displayingOptions() {
 		System.out.println("Enter the number of your desired action: 1) Deposit 2) Withdraw 3) Transfer 4) Account");
 	}
-	
 	//Code that gets user input
 	//No tests needed...for now (probably discuss in future class)
 	
@@ -84,6 +84,7 @@ public class Menu {
 	public void processingDeposit() {
 		double amount = validMoneyInput();
 		account.deposit(amount);
+<<<<<<< HEAD
 		System.out.println("Your balance is now: " + account.getBalance());
 		
 	}
@@ -95,6 +96,9 @@ public class Menu {
 	}
 	public void processingWithdraw() {
 		
+=======
+		System.out.println("Your balance now is: $" + account.getBalance());
+>>>>>>> eb1d933bbff19e2dc491c3ea300a6a3ef7b829c6
 	}
 	public BankAccount getAccount() {
 		return account;
