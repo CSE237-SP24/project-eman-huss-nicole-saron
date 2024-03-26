@@ -1,39 +1,4 @@
-<<<<<<< HEAD
-package bankapp;
 
-public class BankAccount {
-	
-	private double balance;
-	
-	//Constructors - not tested
-	public BankAccount() {
-		this.balance = 0;
-	}
-	
-	//public method doing some work - lots of tests
-	public void deposit(double amount) {
-		if(amount < 0) {
-			throw new IllegalArgumentException("Amount must be positive");
-		}
-		this.balance += amount;
-	}
-	public void transfer(BankAccount receivingAccount, double amount) {
-		if(amount < 0) {
-			throw new IllegalArgumentException("Amount must be positive");
-		} 
-		if(amount > this.balance) {
-			throw new IllegalArgumentException("You are overdrafting your account. Your balance is: " + this.balance + ". Please transfer an amount less than or equal to your balance.");
-		}
-		this.balance = this.balance - amount;
-		receivingAccount.balance += amount;
-	}
-	
-	//getters and setters - not tested
-	public double getBalance() {
-		return this.balance;
-	}
-}
-=======
 package bankapp;
 
 // a hash set doesnt allow duplicates and doesnt maintain insertion order
@@ -70,8 +35,11 @@ public class BankAccount {
 		return this.balance;
 	}
 
-	protected void addBalance(double amount) {
+	public void addBalance(double amount) {
 		this.balance += amount;
+	}
+	public void removeBalance(double amount) {
+		this.balance -= amount;
 	}
 
 	// Factory method for the constructor with the name
@@ -108,8 +76,9 @@ public class BankAccount {
 
 	public void deposit(double amount){
 	 	depositHandler.depositInAccount(this, amount);
-	 }
-
+	}
+	public void transfer( BankAccount receivingAccount, double amount){
+	 	transferHandler.transfer(this, receivingAccount,amount);
+	}
 }
 
->>>>>>> eb1d933bbff19e2dc491c3ea300a6a3ef7b829c6
