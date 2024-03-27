@@ -1,7 +1,7 @@
 package bankapp;
 
 public class transferHandler {
-	public void transfer(BankAccount sendingAccount, BankAccount receivingAccount, double amount) {
+	public static void transfer(BankAccount sendingAccount, BankAccount receivingAccount, double amount) {
 		if(amount < 0) {
 			throw new IllegalArgumentException("Amount must be positive");
 		} 
