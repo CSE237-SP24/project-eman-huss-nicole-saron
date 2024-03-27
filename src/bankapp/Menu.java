@@ -8,9 +8,13 @@ public class Menu {
 	private Scanner in;
 	private BankAccount account;
 	private static boolean exit = false;
-	
+
 	// not tested
 	public static void main(String[] args) {
+		
+		// test account to transfer money to
+		BankAccount.createAccount("MenuTestAccount");
+		
 		Menu mainMenu = new Menu();
 		mainMenu.readData();
 		while(!exit) {			
@@ -89,10 +93,10 @@ public class Menu {
 			processingDeposit();
 			break;
 		case 2:
-			processingTransfer();
+			processingWithdraw();
 			break;
 		case 3:
-			processingWithdraw();
+			processingTransfer();
 			break;
 		case 4:
 			getAccount();
@@ -131,6 +135,7 @@ public class Menu {
 	}
 
 	public BankAccount getAccount() {
+		System.out.println(account.getAccountName());
 		return account;
 	}
 }

@@ -57,9 +57,6 @@ public class BankAccount {
 		return account;
 	}
 
-	// TODO: add a createAccount method that also takes in an initial amount of cash
-	// ?
-
 	// TODO: TEMP: remove these: Factory method for the constructor without a name
 	public static BankAccount createAccount() {
 		// these temporary nameless accounts wont be added to the allAccountNames set
