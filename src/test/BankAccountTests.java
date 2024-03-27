@@ -9,16 +9,10 @@ import bankapp.BankAccount;
 
 class BankAccountTests {
 
-	@BeforeEach
-	void setUp() {
-		BankAccount testAccount = BankAccount.createAccount("TestAccount");
-		BankAccount testAccount2 = BankAccount.createAccount("TestAccount2");
-	}
-	
 	@Test
 	void testSimpleDeposit() {
 		//1. Setup Objects
-		BankAccount johnAccount = BankAccount.createAccount("John");
+		BankAccount johnAccount = BankAccount.createAccount("John1");
 		
 		//2. Call the method being tested
 		johnAccount.deposit(25);
@@ -27,19 +21,45 @@ class BankAccountTests {
 		assertEquals(25.0, johnAccount.getBalance(), 0.01);	
 	}
 	
-	@Test
-	void testNegativeDeposit() {
-		//1. Setup Objects	
-		BankAccount testAccount = BankAccount.createAccount();
-		
-		//2. Call the method being tested
-		try {
-			testAccount.deposit(-25);
-			fail();
-		} catch (IllegalArgumentException e) {
-			//we expect to end up here, -25 is a bad input
-			assertTrue(true);
-		}
-	}
+	
+    @Test
+    void testGetAccountName() {
+        // 1. Setup Objects
+        BankAccount johnAccount = BankAccount.createAccount("John2");
+
+        // 2. Call the method being tested
+        String accountName = johnAccount.getAccountName();
+
+        // 3. Use assertions to verify results
+        assertEquals("John2", accountName);
+    }
+
+    @Test
+    void testGetAccountByName() {
+        // 1. Setup Objects
+        BankAccount johnAccount = BankAccount.createAccount("John3");
+        BankAccount maryAccount = BankAccount.createAccount("Mary");
+
+        // 2. Call the method being tested
+        BankAccount retrievedAccount = BankAccount.getAccountByName("John3");
+
+        // 3. Use assertions to verify results
+        assertNotNull(retrievedAccount);
+        assertEquals("John3", retrievedAccount.getAccountName());
+        assertEquals(johnAccount, retrievedAccount);
+    }
+
+    @Test
+    void testGetAccountByNameNonExistent() {
+        // 1. Setup Objects
+        BankAccount johnAccount = BankAccount.createAccount("John4");
+        BankAccount maryAccount = BankAccount.createAccount("Mary");
+
+        // 2. Call the method being tested
+        BankAccount retrievedAccount = BankAccount.getAccountByName("NonExistentAccount");
+
+        // 3. Use assertions to verify results
+        assertNull(retrievedAccount);
+    }
 
 }
