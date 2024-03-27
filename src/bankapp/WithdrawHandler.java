@@ -1,6 +1,6 @@
 package bankapp;
 
-public class withdrawHandler {
+public class WithdrawHandler {
 
     public void withdrawInAccount(BankAccount account, double amount) {
 		if (!withdrawErrorHandler(account, amount)) {
