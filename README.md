@@ -1,11 +1,5 @@
 # base-project
 
-Add description of what happened each iteration
-User stories completed this iteration:
-deposit, Menu accept more options, withdraw, transfer account manager (account names)
+To start this project, we created a branch for each task (withdraw, account manager, deposit, transfer) as to prevent merge conflicts. After preliminary coding, we combined all code into the development branch. bankapp holds 5 files (BankAccount, Menu, DepositHandler, WithdrawHandler, and TransferHandler), and tests holds the respective tests. The BankAccount file manages the accounts by using a HashMap to store created accounts, and the file holds methods for deposit, withdraw, and transfer. The Menu file is the interface to run commands (deposit, withdraw, etc). The handler files for deposit, withdraw, and transfer execute the command only if there are no errors. We accounted for errors such as negative dollar amounts and excessive dollar amounts. In the test files, we check the functionality of the bankapp files. The BankAccountTests check if actions affect the proper account name. MenuTests checks if amounts properly update. The tests for the handlers properly checks if the accounted for errors do not impact the balance.
 
-user stories to complete next iteration:
-maybe log in and log out of accounts?
-
-implemented but doesn't currently work:
-take in account for transfer
+Currently, running Menu provides the following user stories: deposit, withdraw, transfer, account, and exit. Based on our tests, we need to fix transfer so it can take in accounts. In the next iteration, we intend to continue working on the TransferHandler, MenuTests, and BankAccountTests. We could also maybe add a user story that logs in and out of accounts.
