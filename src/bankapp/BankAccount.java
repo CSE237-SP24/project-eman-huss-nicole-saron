@@ -1,17 +1,16 @@
 
 package bankapp;
 
-// a hash set doesnt allow duplicates and doesnt maintain insertion order
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BankAccount {
 
 	private double balance; // we can add balance to be part of the constructor
 	private String accountName = "";
 	private DepositHandler depositHandler;
-	private static Set<String> allAccountNames = new HashSet<>();
-
+    private static Map<String, BankAccount> allAccounts = new HashMap<>();
+    
 	// -- Constructors are private because they shouldn't be called on from the
 	// outside, call the createAccount method instead
 	// Constructor with an account name
@@ -50,13 +49,13 @@ public class BankAccount {
 			System.err.print("FATAL ERROR: name cannot be null !!");
 		}
 
-		if (!allAccountNames.contains(name)) {
+		if (allAccounts.containsKey(name)) {
 			System.err.println("This account name is already taken");
 			return null;
 		}
-
-		allAccountNames.add(name);
-		return new BankAccount(name);
+		BankAccount account = new BankAccount(name);
+		allAccounts.put(name, account);
+		return account;
 	}
 
 	// TODO: add a createAccount method that also takes in an initial amount of cash
@@ -68,17 +67,15 @@ public class BankAccount {
 		return new BankAccount(null);
 	}
 
-	// TODO: a bankaccount shouldnt see other accounts, this should be
-	// a banker focused feature
-	public Set<String> getAllAccountNames() {
-		return allAccountNames;
-	}
-
 	public void deposit(double amount){
 	 	depositHandler.depositInAccount(this, amount);
 	}
-	public void transfer( BankAccount receivingAccount, double amount){
+	public void transfer(BankAccount receivingAccount, double amount){
 	 	transferHandler.transfer(this, receivingAccount,amount);
 	}
+	
+    public static BankAccount getAccountByName(String name) {
+        return allAccounts.get(name);
+    }
 }
 
