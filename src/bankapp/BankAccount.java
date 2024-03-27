@@ -9,6 +9,8 @@ public class BankAccount {
 	private double balance; // we can add balance to be part of the constructor
 	private String accountName = "";
 	private DepositHandler depositHandler;
+	private WithdrawHandler withdrawHandler;
+	private TransferHandler transferHandler;
     private static Map<String, BankAccount> allAccounts = new HashMap<>();
     
 	// -- Constructors are private because they shouldn't be called on from the
@@ -19,11 +21,8 @@ public class BankAccount {
 		this.balance = 0;
 
 		this.depositHandler = new DepositHandler();
-//		 this.withdrawHandler = new WithdrawHandler();
-//		 this.transferHandler = new TransferHandler();
-		// we can do all the above or we can make a generic transaction handler class
-		// that then deals with making these handlers
-
+    	this.withdrawHandler = new WithdrawHandler();
+		this.transferHandler = new TransferHandler();
 	}
 
 	public String getAccountName() {
