@@ -76,5 +76,9 @@ public class BankAccount {
     public static BankAccount getAccountByName(String name) {
         return allAccounts.get(name);
     }
+    
+    public void withdraw(double amount){
+	 	withdrawHandler.withdrawInAccount(this, amount);
+	}
 }
 
