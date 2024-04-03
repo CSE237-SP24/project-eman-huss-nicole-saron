@@ -59,6 +59,8 @@ public class BankAccount {
 		allAccounts.put(name, account);
 		return account;
 	}
+	
+	// ******************** TRANSACTION METHODS ********************//
 
 	public void deposit(double amount) {
 		if (!this.addBalance(this, amount)) {
@@ -95,6 +97,7 @@ public class BankAccount {
 	}
 
 	// ******************** TRANSACTION ERROR HANDLERS ********************//
+	
 	private boolean removingBalanceErrorHandler(double amount) {
 		if (amount <= 0 || amount == Double.NEGATIVE_INFINITY) {
 			System.err.println("Amount too small, must be positive");
