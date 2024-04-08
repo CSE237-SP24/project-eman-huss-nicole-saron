@@ -12,7 +12,7 @@ public class BankAccount {
 
 	// Constructor is private because they shouldn't be called on from the
 	// outside, call the createAccount method instead
-	private BankAccount(String name) {
+	public BankAccount(String name) {
 		this.accountName = name;
 		this.balance = 0;
 	}

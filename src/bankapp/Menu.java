@@ -1,8 +1,11 @@
 package bankapp;
 
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-
 public class Menu {
 
 	private Scanner in;
@@ -14,40 +17,60 @@ public class Menu {
 		
 		// test account to transfer money to
 		BankAccount.createAccount("MenuTestAccount");
+		File file = new File("./file.txt");
 		
 		Menu mainMenu = new Menu();
-		mainMenu.readData();
+//		mainMenu.readData(file);
 		while(!exit) {			
 			mainMenu.displayingOptions();
 			int task = mainMenu.getValidTaskInput();
 			mainMenu.processingUserSelection(task);
-			mainMenu.writeData();
+			mainMenu.writeData(file);
 		}
 		
 	}
 
-	private void writeData() {
-		// TODO create File, creat PrintWriter, iterate through all bankaccounts and
+	private void writeData(File f) {
+		// TODO create File, create PrintWriter, iterate through all bankaccounts and
 		// write them. RandomAccessFile - -requires more care with formatting
+//		writing to a file
+		try {
+			PrintWriter out = new PrintWriter(f);
+			BankAccount ba = new BankAccount("Jeff");
+			ba.deposit(100);
+			out.println(ba);
+			out.close();			
+		} catch (FileNotFoundException e){
+			e.printStackTrace();
+		}
 
 	}
+	
+//	order of account info: username, balance, (then put account type in iteration 3)
 
-	private void readData() {
-		// TODO create File, Create scanner, read in data and create BankAccount
+	private void readData(File f) throws FileNotFoundException {
+		//			Scanner in = new Scanner (inFile);
+					String name = in.next();
+					double balance = in.nextDouble();
 
 	}
 
 	// Constructor
 	public Menu() {
-		System.out.print("Enter your name:");
+		System.out.print("Enter your username:");
 		this.in = new Scanner(System.in);
 		this.account = BankAccount.createAccount(in.next());
 	}
 
 	// Code that just displays stuff - no tests needed
 	public void displayingOptions() {
-		System.out.println("Enter the number of your desired action: \n 1) Deposit\n 2) Withdraw\n 3) Transfer\n 4) Account\n 5) exit\n");
+		System.out.println("Enter the number of your desired action: 1) Transactions 2)Account");
+		System.out.println("Enter the number of your desired action: "
+				+ "\n 1) Deposit\n 2) Withdraw\n 3) Transfer\n 4) Account\n 5) exit\n");
+		System.out.println("Enter the number of your desired action: "
+				+ "\n 1) Deposit\n 2) Withdraw\n 3) Transfer\n 4) Account\n 5) exit\n");
 	}
+//	first display their original options, then based on that first input, present the options related to the next one
 	// Code that gets user input
 	// No tests needed...for now (probably discuss in future class)
 
