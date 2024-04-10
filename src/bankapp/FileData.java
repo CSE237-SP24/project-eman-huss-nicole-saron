@@ -17,7 +17,7 @@ public class FileData {
 			System.out.println("file not found. do better");
 			e.printStackTrace();
 		}
-//		writing to a file
+//		writing to a file //
 		try {
 			PrintWriter out = new PrintWriter(inFile);
 			BankAccount ba = new BankAccount("Jeff");
