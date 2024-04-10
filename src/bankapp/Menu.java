@@ -1,57 +1,71 @@
 package bankapp;
 
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.InputMismatchException;
+import java.util.Map;
 import java.util.Scanner;
+
 public class Menu {
 
 	private Scanner in;
 	private BankAccount account;
 	private static boolean exit = false;
-
+	private static Map<String, BankAccount> allAccounts = new HashMap<>();
+	
+	public BankAccount getAccountByName(String name) {
+		return allAccounts.get(name);
+	}
+	
 	// not tested
-	public static void main(String[] args) {
-		
+	public static void main(String[] args) throws FileNotFoundException {
+
 		// test account to transfer money to
-		BankAccount.createAccount("MenuTestAccount");
 		File file = new File("./file.txt");
-		
+
 		Menu mainMenu = new Menu();
+		mainMenu.createAccount("MenuTestAccount");
 //		mainMenu.readData(file);
-		while(!exit) {			
+		while (!exit) {
 			mainMenu.displayingOptions();
 			int task = mainMenu.getValidTaskInput();
 			mainMenu.processingUserSelection(task);
-			mainMenu.writeData(file);
-		}
-		
-	}
-
-	private void writeData(File f) {
-		// TODO create File, create PrintWriter, iterate through all bankaccounts and
-		// write them. RandomAccessFile - -requires more care with formatting
-//		writing to a file
-		try {
-			PrintWriter out = new PrintWriter(f);
-			BankAccount ba = new BankAccount("Jeff");
-			ba.deposit(100);
-			out.println(ba);
-			out.close();			
-		} catch (FileNotFoundException e){
-			e.printStackTrace();
+//			mainMenu.writeData(file);
 		}
 
 	}
 	
+	// Factory method for the constructor with the name
+	public BankAccount createAccount(String name) {
+		if (name == null || name.isEmpty()) {
+			System.err.print("FATAL ERROR: name cannot be null !!");
+		}
+
+		if (allAccounts.containsKey(name)) {
+			System.err.println("This account name is already taken");
+			return null;
+		}
+		BankAccount account = new BankAccount(name);
+		allAccounts.put(name, account);
+		return account;
+	}
+	
+	// TODO:!!!! change to private later
+	public void writeData(File f, BankAccount acc) throws FileNotFoundException {
+		PrintWriter out = new PrintWriter(f);
+		out.println(acc);
+		out.close();
+
+	}
+
 //	order of account info: username, balance, (then put account type in iteration 3)
 
 	private void readData(File f) throws FileNotFoundException {
-		//			Scanner in = new Scanner (inFile);
-					String name = in.next();
-					double balance = in.nextDouble();
+		// Scanner in = new Scanner (inFile);
+		String name = in.next();
+		double balance = in.nextDouble();
 
 	}
 
@@ -59,7 +73,7 @@ public class Menu {
 	public Menu() {
 		System.out.print("Enter your username:");
 		this.in = new Scanner(System.in);
-		this.account = BankAccount.createAccount(in.next());
+		this.account = createAccount(in.next());
 	}
 
 	// Code that just displays stuff - no tests needed
@@ -75,28 +89,27 @@ public class Menu {
 	// No tests needed...for now (probably discuss in future class)
 
 	public int getValidTaskInput() {
-	    int task = 0;
-	    boolean validInput = false;
-	    
-	    while (!validInput) {
-	        try {
-	            task = in.nextInt();
-	            if (task < 0 || task > 5) {
-	                System.err.println("Invalid value!");
-	                displayingOptions();
-	            } else {
-	                validInput = true;
-	            }
-	        } catch (InputMismatchException e) {
-	            System.err.println("Invalid input! Please enter an integer.");
-	            in.nextLine(); // Clear the invalid input from the scanner
-	            displayingOptions();
-	        }
-	    }
-	    
-	    return task;
-	}
+		int task = 0;
+		boolean validInput = false;
 
+		while (!validInput) {
+			try {
+				task = in.nextInt();
+				if (task < 0 || task > 5) {
+					System.err.println("Invalid value!");
+					displayingOptions();
+				} else {
+					validInput = true;
+				}
+			} catch (InputMismatchException e) {
+				System.err.println("Invalid input! Please enter an integer.");
+				in.nextLine(); // Clear the invalid input from the scanner
+				displayingOptions();
+			}
+		}
+
+		return task;
+	}
 
 	public double validMoneyInput() {
 		System.out.println("How much?");
@@ -129,7 +142,7 @@ public class Menu {
 			break;
 		}
 	}
-	
+
 	public void exit() {
 		System.out.println("exiting...");
 		exit = true;
@@ -143,15 +156,15 @@ public class Menu {
 	}
 
 	public void processingTransfer() {
-	    System.out.println("Enter the name of the account to transfer to");
-	    String receivingAccountName = in.next();
-	    BankAccount receivingAccount = BankAccount.getAccountByName(receivingAccountName);
-	    if (receivingAccount == null) {
-	        System.out.println("Invalid account name. Transfer failed.");
-	        return;
-	    }
-	    double amount = validMoneyInput();
-	    account.transfer(receivingAccount, amount);
+		System.out.println("Enter the name of the account to transfer to");
+		String receivingAccountName = in.next();
+		BankAccount receivingAccount = getAccountByName(receivingAccountName);
+		if (receivingAccount == null) {
+			System.out.println("Invalid account name. Transfer failed.");
+			return;
+		}
+		double amount = validMoneyInput();
+		account.transfer(receivingAccount, amount);
 	}
 
 	public void processingWithdraw() {

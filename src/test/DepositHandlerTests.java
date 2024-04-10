@@ -6,13 +6,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import bankapp.BankAccount;
+import bankapp.Menu;
 
 class DepositHandlerTests {
 	private BankAccount testAccount; 
 	
 	@BeforeEach
 	void setup() {
-        testAccount = BankAccount.createAccount("test");
+		Menu mainMenu = new Menu();
+        testAccount = mainMenu.createAccount("test");
 	}
 
     @Test
