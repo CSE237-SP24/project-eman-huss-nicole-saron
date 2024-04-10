@@ -174,4 +174,13 @@ public class Menu {
 		System.out.println(account.getAccountName());
 		return account;
 	}
+	
+	public boolean terminateAccount(String accountName) {
+		if (allAccounts.containsKey(accountName)) {
+			allAccounts.remove(accountName);
+			return true;
+		}
+		System.err.println("Account not found.");
+		return false;
+	}
 }
