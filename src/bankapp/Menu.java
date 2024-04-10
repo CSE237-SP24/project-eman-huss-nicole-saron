@@ -18,7 +18,7 @@ public class Menu {
 	public BankAccount getAccountByName(String name) {
 		return allAccounts.get(name);
 	}
-	
+
 	// not tested
 	public static void main(String[] args) throws FileNotFoundException {
 
@@ -30,11 +30,11 @@ public class Menu {
 			mainMenu.displayingLoginOptions();
 			int task = mainMenu.getValidTaskInput();
 			mainMenu.processingUserSelection(task);
-//			mainMenu.writeData(file);
+			//			mainMenu.writeData(file);
 		}
 
 	}
-	
+
 	// Factory method for the constructor with the name
 	public BankAccount createAccount(String name) {
 		if (name == null || name.isEmpty()) {
@@ -49,7 +49,7 @@ public class Menu {
 		allAccounts.put(name, account);
 		return account;
 	}
-	
+
 	// TODO:!!!! change to private later
 	public void writeData(File f, BankAccount acc) throws FileNotFoundException {
 		PrintWriter out = new PrintWriter(f);
@@ -58,7 +58,7 @@ public class Menu {
 
 	}
 
-//	order of account info: username, balance, (then put account type in iteration 3)
+	//	order of account info: username, balance, (then put account type in iteration 3)
 
 	private void readData(File f) throws FileNotFoundException {
 		Scanner in = new Scanner (f);
@@ -69,18 +69,18 @@ public class Menu {
 			account.deposit(balance);
 			allAccounts.put(name, account);
 		}
-		
+
 		in.close();
 	}
 
 	// Constructor
 	public Menu() {
-//		System.out.print("Enter your username:");
+		//		System.out.print("Enter your username:");
 		this.in = new Scanner(System.in);
-//		this.account = createAccount(in.next());
+		//		this.account = createAccount(in.next());
 	}
-	
-//	login or sign up
+
+	//	login or sign up
 	public void displayingLoginOptions() {
 		System.out.println("If you have an account with us, please press one. Otherwise, press two.: 1) Log in 2)Sign up");
 		int logininput = in.nextInt();
@@ -91,7 +91,7 @@ public class Menu {
 			System.err.println("Welcome! Please create an account by providing a username.");
 			BankAccount newAccount = createAccount(in.next());
 			allAccounts.put(newAccount.getAccountName(), newAccount);
-//			TODO for next meeting: call writeData here to update file with new account?
+			//			TODO for next meeting: call writeData here to update file with new account?
 			account = allAccounts.get(newAccount.getAccountName());
 		}
 		displayingAccountOptions();
@@ -127,7 +127,7 @@ public class Menu {
 		return task;
 	}
 
-//	TODO for next meeting: do we need this function if deposit function already accounts for invalid inputs?
+	//	TODO for next meeting: do we need this function if deposit function already accounts for invalid inputs?
 	public double validMoneyInput() {
 		System.out.println("How much?");
 		double amount = in.nextDouble();
@@ -220,6 +220,37 @@ public class Menu {
 		return false;
 	}
 	public void changeUsername() {
-		
+		System.out.println("Enter new username: ");
+		String newUsername = in.next();
+
+		if (allAccounts.containsKey(newUsername)) {
+			System.err.println("Username already exists. Create a different username.");
+			return;
+		}
+
+		String currentUsername = account.getAccountName();
+		if (allAccounts.containsKey(currentUsername)) {
+			allAccounts.remove(currentUsername);
+			account = new BankAccount(newUsername);
+			allAccounts.put(newUsername, account);
+			System.out.println("Username successfully changed. Your new username is: " + newUsername + ".");
+		} else {
+			System.err.println("Username unable to update.");
+		}
+
+		// Attempt #1 - would've worked if we had setAccountName in BankAccount.java but we only have get
+
+		//		String currentUsername = account.getAccountName();
+		//		if (allAccounts.containsKey(currentUsername)) {
+		//			terminateAccount(currentUsername);
+		//			account.setAccountName(newUsername);
+		//			allAccounts.put(newUsername,  account);
+		//			System.out.println("Username changed successfully to '" + newUsername + "'.");
+		//		} else {
+		//			System.err.println("Username unable to update.");
+		//		}
+		//
+		//		
+		//	}
 	}
 }
