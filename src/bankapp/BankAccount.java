@@ -60,6 +60,21 @@ public class BankAccount {
 		return account;
 	}
 	
+	// ******************** LOGIN LOGOUT ********************//
+	
+	public boolean login(String accountName) {
+		if (BankAccount.getAccountByName(accountName) == null) {
+			System.err.println("ERROR: Account not found");
+			return false;
+		}
+		System.out.println("login successful");
+		return true;
+	}
+	
+	public void logout() {
+		//return to main menu, select new bankaccount object
+	}
+	
 	// ******************** TRANSACTION METHODS ********************//
 
 	public void deposit(double amount) {
