@@ -8,7 +8,6 @@ public class BankAccount {
 
 	private double balance;
 	private String accountName = "";
-	private static Map<String, BankAccount> allAccounts = new HashMap<>();
 
 	// Constructor is private because they shouldn't be called on from the
 	// outside, call the createAccount method instead
@@ -17,9 +16,7 @@ public class BankAccount {
 		this.balance = 0;
 	}
 
-	public static BankAccount getAccountByName(String name) {
-		return allAccounts.get(name);
-	}
+
 
 	public String getAccountName() {
 		return this.accountName;
@@ -45,21 +42,7 @@ public class BankAccount {
 		return true;
 	}
 
-	// Factory method for the constructor with the name
-	public static BankAccount createAccount(String name) {
-		if (name == null || name.isEmpty()) {
-			System.err.print("FATAL ERROR: name cannot be null !!");
-		}
 
-		if (allAccounts.containsKey(name)) {
-			System.err.println("This account name is already taken");
-			return null;
-		}
-		BankAccount account = new BankAccount(name);
-		allAccounts.put(name, account);
-		return account;
-	}
-	
 	// ******************** TRANSACTION METHODS ********************//
 
 	public void deposit(double amount) {
