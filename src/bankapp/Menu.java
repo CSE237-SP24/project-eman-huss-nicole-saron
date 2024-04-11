@@ -15,8 +15,13 @@ public class Menu {
 	private static boolean exit = false;
 	private static Map<String, BankAccount> allAccounts = new HashMap<>();
 	private static File file = new File("./file.txt");
+	
 	public BankAccount getAccountByName(String name) {
 		return allAccounts.get(name);
+	}
+	
+	public int getAccountHash(BankAccount account) {
+		return (account.getAccountName()).hashCode();
 	}
 	
 	// not tested
