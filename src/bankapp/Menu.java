@@ -15,11 +15,15 @@ public class Menu {
 	private static boolean exit = false;
 	private static Map<String, BankAccount> allAccounts = new HashMap<>();
 	private static File file = new File("./file.txt");
+	
 	public BankAccount getAccountByName(String name) {
 		return allAccounts.get(name);
 	}
 
-	// not tested
+	public int getAccountHash(BankAccount account) {
+		return (account.getAccountName()).hashCode();
+	}
+		// not tested
 	public static void main(String[] args) throws FileNotFoundException {
 
 		// test account to transfer money to
@@ -34,7 +38,7 @@ public class Menu {
 		}
 
 	}
-
+	
 	// Factory method for the constructor with the name
 	public BankAccount createAccount(String name) {
 		if (name == null || name.isEmpty()) {
