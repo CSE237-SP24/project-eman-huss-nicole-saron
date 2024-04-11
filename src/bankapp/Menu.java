@@ -62,7 +62,7 @@ public class Menu {
 		return account;
 	}
 
-	// TODO:!!!! change to private later
+	// USE THIS
 	private void writeData(File f, BankAccount acc) throws IOException {
 		// line number
 		int recordNumber = getAccountHash(acc);
@@ -74,8 +74,7 @@ public class Menu {
 		fileData.writeData(recordNumber, data);
 	}
 
-	//	order of account info: username, balance, (then put account type in iteration 3)
-
+	//	gonna need to update this!!!!!!!!! TODO:
 	private void readData(File f) throws FileNotFoundException {
 		Scanner in = new Scanner (f);
 		while (in.hasNextLine()) {
