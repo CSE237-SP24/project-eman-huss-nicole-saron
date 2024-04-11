@@ -37,7 +37,6 @@ public class Menu {
 		// test account to transfer money to
 		
 		Menu mainMenu = new Menu();
-		mainMenu.readData(file);
 		while (!exit) {
 			mainMenu.displayingLoginOptions();
 			int task = mainMenu.getValidTaskInput();
@@ -62,30 +61,32 @@ public class Menu {
 		return account;
 	}
 
-	// USE THIS
-	private void writeData(File f, BankAccount acc) throws IOException {
-		// line number
-		int recordNumber = getAccountHash(acc);
+	
+	private void writeData(BankAccount account) throws IOException {
+		int recordNumber = getAccountHash(account); // line number
 		
-		String name = acc.getAccountName();
-		String balance = String.valueOf(acc.getBalance());
+		String name = account.getAccountName();
+		String balance = String.valueOf(account.getBalance());
 		String data = name + ";" + balance;
 		
 		fileData.writeData(recordNumber, data);
 	}
 
-	//	gonna need to update this!!!!!!!!! TODO: /
-	private void readData(File f) throws FileNotFoundException {
-		Scanner in = new Scanner (f);
-		while (in.hasNextLine()) {
-			String name = in.next();
-			double balance = in.nextDouble();
-			BankAccount account = new BankAccount(name); 
-			account.deposit(balance);
-			allAccounts.put(name, account);
-		}
-
-		in.close();
+	private String readData(BankAccount account) throws IOException {
+		int recordNumber = getAccountHash(account);
+		String readData = fileData.readData(recordNumber);
+		return readData;
+		
+//		Scanner in = new Scanner (f);
+//		while (in.hasNextLine()) {
+//			String name = in.next();
+//			double balance = in.nextDouble();
+//			BankAccount account = new BankAccount(name); 
+//			account.deposit(balance);
+//			allAccounts.put(name, account);
+//		}
+//
+//		in.close();
 	}
 
 
