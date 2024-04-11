@@ -40,6 +40,10 @@ public class Menu {
 
 	}
 	
+	public int getAccountHash(BankAccount account) {
+		return (account.getAccountName()).hashCode();
+	}
+	
 	// Factory method for the constructor with the name
 	public BankAccount createAccount(String name) {
 		if (name == null || name.isEmpty()) {
