@@ -2,7 +2,7 @@ package bankapp;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Map;
@@ -15,6 +15,14 @@ public class Menu {
 	private static boolean exit = false;
 	private static Map<String, BankAccount> allAccounts = new HashMap<>();
 	private static File file = new File("./file.txt");
+	private FileData fileData;
+	// Constructor
+	public Menu() {
+		//		System.out.print("Enter your username:");
+		this.in = new Scanner(System.in);
+		//		this.account = createAccount(in.next());
+		this.fileData = new FileData("./file.txt", 50);
+	}
 	
 	public BankAccount getAccountByName(String name) {
 		return allAccounts.get(name);
@@ -25,9 +33,9 @@ public class Menu {
 	}
 		// not tested
 	public static void main(String[] args) throws FileNotFoundException {
-
+		
 		// test account to transfer money to
-
+		
 		Menu mainMenu = new Menu();
 		mainMenu.readData(file);
 		while (!exit) {
@@ -55,11 +63,15 @@ public class Menu {
 	}
 
 	// TODO:!!!! change to private later
-	public void writeData(File f, BankAccount acc) throws FileNotFoundException {
-		PrintWriter out = new PrintWriter(f);
-		out.println(acc);
-		out.close();
-
+	private void writeData(File f, BankAccount acc) throws IOException {
+		// line number
+		int recordNumber = getAccountHash(acc);
+		
+		String name = acc.getAccountName();
+		String balance = String.valueOf(acc.getBalance());
+		String data = name + ";" + balance;
+		
+		fileData.writeData(recordNumber, data);
 	}
 
 	//	order of account info: username, balance, (then put account type in iteration 3)
@@ -77,12 +89,7 @@ public class Menu {
 		in.close();
 	}
 
-	// Constructor
-	public Menu() {
-		//		System.out.print("Enter your username:");
-		this.in = new Scanner(System.in);
-		//		this.account = createAccount(in.next());
-	}
+
 
 	//	login or sign up
 	public void displayingLoginOptions() {
