@@ -1,3 +1,4 @@
+
 //package test;
 //
 //import static org.junit.jupiter.api.Assertions.*;
@@ -33,4 +34,15 @@
 //		assertEquals(190, account.getBalance(), 0.01);
 //	}
 //
+//	@Test
+//	void testTerminateAccount() {
+//		Menu m = new Menu();
+//		m.createAccount("John");
+//		assertTrue(m.terminateAccount("John"));
+//	}
+//	@Test
+//	void testTerminateNonExistentAccount() {
+//		Menu m = new Menu();
+//		assertFalse(m.terminateAccount("John"));
+//	}
 //}
