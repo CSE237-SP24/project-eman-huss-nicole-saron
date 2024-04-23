@@ -16,8 +16,6 @@ public class BankAccount {
 		this.balance = 0;
 	}
 
-
-
 	public String getAccountName() {
 		return this.accountName;
 	}

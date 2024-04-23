@@ -15,14 +15,15 @@ public class Menu {
 	private BankAccount account;
 	private static boolean exit = false;
 	private static Map<String, BankAccount> allAccounts = new HashMap<>();
-	private static File file = new File("./file.txt");
 	private FileData fileData;
+	private String path = "./file.txt";
+	
 	// Constructor
 	public Menu() {
 		//		System.out.print("Enter your username:");
 		this.in = new Scanner(System.in);
 		//		this.account = createAccount(in.next());
-		this.fileData = new FileData("./file.txt", 50);
+		this.fileData = new FileData(path, 50);
 	}
 	
 	public BankAccount getAccountByName(String name) {
@@ -98,7 +99,12 @@ public class Menu {
 		int logininput = in.nextInt();
 		if (logininput == 1) { //have an account and are signing in
 			System.err.println("Welcome back! Please enter username.");
-			account = allAccounts.get(in.next());
+			String tempUsername = in.next();
+			if (!allAccounts.containsKey(tempUsername)) {
+				System.err.println("This account name does not exist.");
+				displayingLoginOptions();
+			}
+			account = allAccounts.get(tempUsername);
 		} else {
 			System.err.println("Welcome! Please create an account by providing a username.");
 			BankAccount newAccount = createAccount(in.next());
@@ -212,10 +218,10 @@ public class Menu {
 			getAccount();
 			break;
 		case 2:
-			terminateAccount(account.getAccountName());
+			changeUsername();
 			break;
 		case 3:
-			changeUsername();
+			terminateAccount(account.getAccountName());
 			break;
 		}
 	}
@@ -265,4 +271,18 @@ public class Menu {
 		//		
 		//	}
 	}
+
+	
+	public void clearAllAccountInfo() throws IOException {
+	    // Clear the file by writing an empty string for each account in the map
+	    for (BankAccount account : allAccounts.values()) {
+	        int recordNumber = getAccountHash(account);
+	        String data = ""; // blank
+	        fileData.writeData(recordNumber, data);
+	    }
+
+	    // Clear the allAccounts map
+	    allAccounts.clear();
+	}
+	
 }
