@@ -73,7 +73,7 @@ public class Menu {
 	}
 
 	// Login
-	private boolean readData(String accountName) throws IOException {
+	public boolean readData(String accountName) throws IOException {
 		BigInteger recordNumber = BigInteger.valueOf(accountName.hashCode());
 		recordNumber = recordNumber.and(BigInteger.valueOf(Long.MAX_VALUE));
 
