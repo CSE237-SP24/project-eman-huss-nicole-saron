@@ -5,6 +5,7 @@ We suggest running the project with an empty file.txt because it takes on a lot 
 1. Present an option to login or sign up
 2. Upon logging in, presents the following: deposit, withdraw, transfer, account settings, and exit
 3. Within account settings, presents the following: account information, change username, terminate account
+
 Within each function are various tests to check for functionality. For example, there is a test to determine if terminate account ran properly.
 
 Iteration 2:
