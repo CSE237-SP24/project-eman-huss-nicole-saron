@@ -1,22 +1,15 @@
 /////
 package bankapp;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class BankAccount {
 
 	private double balance;
 	private String accountName = "";
 
-	// Constructor is private because they shouldn't be called on from the
-	// outside, call the createAccount method instead
 	public BankAccount(String name) {
 		this.accountName = name;
 		this.balance = 0;
 	}
-
-
 
 	public String getAccountName() {
 		return this.accountName;
@@ -50,7 +43,7 @@ public class BankAccount {
 			System.err.println("failed to deposit moneys");
 			return;
 		}
-		System.out.println("deposit successfull");
+		System.out.println("deposit successful");
 	}
 
 	public void withdraw(double amount) {
@@ -61,22 +54,23 @@ public class BankAccount {
 		System.out.println("withdraw succeeded");
 	}
 
-	public void transfer(BankAccount receivingAccount, double amount) {
+	public boolean transfer(BankAccount receivingAccount, double amount) {
 		if (!this.removeBalance(amount)) {
 			System.err.println("transfer failed: an error in your balance");
-			return;
+			return false;
 		}
 
 		if (receivingAccount == null || receivingAccount.accountName.isBlank()) {
 			System.err.println("transfer failed: receiving account not found :(");
-			return;
+			return false;
 		}
 
 		if (!receivingAccount.addBalance(receivingAccount, amount)) {
 			System.err.println("transfer failed: an error in the receivingAccount's balance");
+			return false;
 		}
-
 		System.out.println("transfer success");
+		return true;
 	}
 
 	// ******************** TRANSACTION ERROR HANDLERS ********************//

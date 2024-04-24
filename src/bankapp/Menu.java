@@ -1,11 +1,9 @@
 package bankapp;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.util.HashMap;
+import java.io.IOException;
+import java.math.BigInteger;
 import java.util.InputMismatchException;
-import java.util.Map;
 import java.util.Scanner;
 
 public class Menu {
@@ -13,96 +11,174 @@ public class Menu {
 	private Scanner in;
 	private BankAccount account;
 	private static boolean exit = false;
-	private static Map<String, BankAccount> allAccounts = new HashMap<>();
-	private static File file = new File("./file.txt");
-	public BankAccount getAccountByName(String name) {
-		return allAccounts.get(name);
+	private FileData fileData;
+	private String path = "./file.txt";
+
+	public Menu() {
+		this.in = new Scanner(System.in);
+		this.fileData = new FileData(path, 80);
 	}
 
-	// not tested
-	public static void main(String[] args) throws FileNotFoundException {
 
-		// test account to transfer money to
+	public long getAccountHash(BankAccount account) {
+		return ((account.getAccountName()).hashCode());
+	}
+	public BankAccount getAccountByName(String accountName) {
+		BigInteger recordNumber = BigInteger.valueOf(accountName.hashCode());
+		recordNumber = recordNumber.and(BigInteger.valueOf(Long.MAX_VALUE));
 
+		try {
+			String readData = fileData.readData(recordNumber);
+			if (readData.isBlank()) {
+				System.out.println("Account not found: " + accountName);
+				return null;
+			}
+			String[] parts = readData.split(";");
+			if (parts.length >= 2) {
+				accountName = parts[0];
+				Double balance = Double.parseDouble(parts[1]);
+				account = createAccount(accountName);
+				account.addBalance(account, balance);
+				return account;
+			} else {
+				System.out.println("Invalid account data format");
+				return null;
+			}
+		} catch (IOException e) {
+			System.err.println("An error occurred while reading the account data: " + e.getMessage());
+			return null;
+		}
+	}
+
+
+	public static void main(String[] args) throws IOException {
 		Menu mainMenu = new Menu();
-		mainMenu.readData(file);
 		while (!exit) {
 			mainMenu.displayingLoginOptions();
+			mainMenu.displayingAccountOptions();
 			int task = mainMenu.getValidTaskInput();
 			mainMenu.processingUserSelection(task);
-			//			mainMenu.writeData(file);
 		}
-
 	}
 
-	// Factory method for the constructor with the name
-	public BankAccount createAccount(String name) {
+	public BankAccount createAccount(String name) throws IOException {
 		if (name == null || name.isEmpty()) {
 			System.err.print("FATAL ERROR: name cannot be null !!");
 		}
 
-		if (allAccounts.containsKey(name)) {
-			System.err.println("This account name is already taken");
+		account = new BankAccount(name);
+		try {
+			writeData(account);
+		} catch (IOException e) {
+			System.err.println("An error occurred while writing the account data: " + e.getMessage());
 			return null;
 		}
-		BankAccount account = new BankAccount(name);
-		allAccounts.put(name, account);
 		return account;
 	}
 
-	// TODO:!!!! change to private later
-	public void writeData(File f, BankAccount acc) throws FileNotFoundException {
-		PrintWriter out = new PrintWriter(f);
-		out.println(acc);
-		out.close();
+	private void writeData(BankAccount account) throws IOException {
+		BigInteger hashCode = BigInteger.valueOf(getAccountHash(account)); // line number
+		BigInteger recordNumber = hashCode.and(BigInteger.valueOf(Long.MAX_VALUE));
+		String name = account.getAccountName();
+		String balance = String.valueOf(account.getBalance());
+		String data = name + ";" + balance;
+
+		fileData.writeData(recordNumber, data);
 
 	}
 
-	//	order of account info: username, balance, (then put account type in iteration 3)
+	// Login
+	public boolean readData(String accountName) throws IOException {
+		BigInteger recordNumber = BigInteger.valueOf(accountName.hashCode());
+		recordNumber = recordNumber.and(BigInteger.valueOf(Long.MAX_VALUE));
 
-	private void readData(File f) throws FileNotFoundException {
-		Scanner in = new Scanner (f);
-		while (in.hasNextLine()) {
-			String name = in.next();
-			double balance = in.nextDouble();
-			BankAccount account = new BankAccount(name); 
-			account.deposit(balance);
-			allAccounts.put(name, account);
+		try {
+			String readData = fileData.readData(recordNumber);
+			if (readData.isBlank()) {
+				System.out.println("Account not found: " + accountName);
+				return false;
+			}
+			String[] parts = readData.split(";");
+			if (parts.length >= 2) {
+				accountName = parts[0];
+				Double balance = Double.parseDouble(parts[1]);
+				account = createAccount(accountName);
+				account.addBalance(account, balance);
+				return true;
+			} else {
+				System.out.println("Invalid account data format");
+				return false;
+			}
+		} catch (IOException e) {
+			System.err.println("An error occurred while reading the account data: " + e.getMessage());
+			return false;
+		}
+	}
+
+	// Transferring to another account
+	private BankAccount readSecondAccount(String accountName) throws IOException {
+		BigInteger hashCode = BigInteger.valueOf(accountName.hashCode());
+		BigInteger recordNumber = hashCode.and(BigInteger.valueOf(Long.MAX_VALUE));
+		String readData = fileData.readData(recordNumber);
+		if (readData.isBlank()) {
+			return null;
+		}
+		String[] parts = readData.split(";");
+		accountName = parts[0];
+		Double balance = Double.parseDouble(parts[1]);
+
+		BankAccount secondAccount = createAccount(accountName);
+		secondAccount.deposit(balance);
+		return secondAccount;
+	}
+
+	public void displayingLoginOptions() throws IOException {
+		System.out
+				.println("If you have an account with us, please press one. Otherwise, press two:\n1) Log in 2) Sign up");
+		try {
+			int logininput = in.nextInt();
+
+			if (logininput != 1 && logininput != 2) {
+				System.err.println("pick 1 or  2");
+				displayingLoginOptions();
+			}
+
+			if (logininput == 1) { // have an account and are signing in
+				while (true) {
+					System.out.println("Please enter username.");
+					String tempUsername = in.next();
+					if (!readData(tempUsername)) {
+						System.err.println("Cannot retrieve account data.");
+						continue;
+					}
+					break;
+				}
+			}
+
+			else if (logininput == 2) {
+				System.out.println("Welcome! Please create an account by providing a username.");
+				while (true) {
+					account = createAccount(in.next());
+					if (account == null) {
+						System.err.println("error making the account try again");
+					} else {
+						break;
+					}
+				}
+			}
+
+		} catch (InputMismatchException e) {
+			System.err.println("Invalid input! Please enter an integer.");
+			in.nextLine();
+			displayingLoginOptions();
 		}
 
-		in.close();
 	}
 
-	// Constructor
-	public Menu() {
-		//		System.out.print("Enter your username:");
-		this.in = new Scanner(System.in);
-		//		this.account = createAccount(in.next());
-	}
-
-	//	login or sign up
-	public void displayingLoginOptions() {
-		System.out.println("If you have an account with us, please press one. Otherwise, press two.: 1) Log in 2)Sign up");
-		int logininput = in.nextInt();
-		if (logininput == 1) { //have an account and are signing in
-			System.err.println("Welcome back! Please enter username.");
-			account = allAccounts.get(in.next());
-		} else {
-			System.err.println("Welcome! Please create an account by providing a username.");
-			BankAccount newAccount = createAccount(in.next());
-			allAccounts.put(newAccount.getAccountName(), newAccount);
-			//			TODO for next meeting: call writeData here to update file with new account?
-			account = allAccounts.get(newAccount.getAccountName());
-		}
-		displayingAccountOptions();
-	}
-	// Code that just displays stuff - no tests needed
 	public void displayingAccountOptions() {
 		System.out.println("Enter the number of your desired action: "
 				+ "\n 1) Deposit\n 2) Withdraw\n 3) Transfer\n 4) Account Settings\n 5) Exit\n");
 	}
-	// Code that gets user input
-	// No tests needed...for now (probably discuss in future class)
 
 	public int getValidTaskInput() {
 		int task = 0;
@@ -119,7 +195,7 @@ public class Menu {
 				}
 			} catch (InputMismatchException e) {
 				System.err.println("Invalid input! Please enter an integer.");
-				in.nextLine(); // Clear the invalid input from the scanner
+				in.nextLine();
 				displayingAccountOptions();
 			}
 		}
@@ -127,7 +203,6 @@ public class Menu {
 		return task;
 	}
 
-	//	TODO for next meeting: do we need this function if deposit function already accounts for invalid inputs?
 	public double validMoneyInput() {
 		System.out.println("How much?");
 		double amount = in.nextDouble();
@@ -139,8 +214,7 @@ public class Menu {
 		return amount;
 	}
 
-	// Does work - needs tests
-	public void processingUserSelection(int task) {
+	public void processingUserSelection(int task) throws IOException {
 		switch (task) {
 		case 1:
 			processingDeposit();
@@ -166,91 +240,82 @@ public class Menu {
 		System.out.println("Exited. See you soon!");
 	}
 
-	public void processingDeposit() {
+	public void processingDeposit() throws IOException {
 		double amount = validMoneyInput();
 		account.deposit(amount);
 		System.out.println("Your balance now is: $" + account.getBalance());
+		writeData(account);
 
 	}
 
-	public void processingTransfer() {
+	public void processingTransfer() throws IOException {
 		System.out.println("Enter the name of the account to transfer to");
 		String receivingAccountName = in.next();
-		BankAccount receivingAccount = getAccountByName(receivingAccountName);
+		BankAccount receivingAccount = readSecondAccount(receivingAccountName);
 		if (receivingAccount == null) {
 			System.out.println("Invalid account name. Transfer failed.");
 			return;
 		}
 		double amount = validMoneyInput();
-		account.transfer(receivingAccount, amount);
+		if (account.transfer(receivingAccount, amount)) {
+			writeData(account);
+			writeData(receivingAccount);
+		}
 	}
 
-	public void processingWithdraw() {
+	public void processingWithdraw() throws IOException {
 		System.out.println("Enter how much to withdraw in cash:");
 		int withdrawAmount = in.nextInt();
 		account.withdraw(withdrawAmount);
 		System.out.println("Your balance now is: $" + account.getBalance());
+		writeData(account);
 	}
 
-	public void accountSettings() {
-		System.out.println("Enter the action you'd like: 1) View account information 2) Change username 3) Terminate account");
+	public void accountSettings() throws IOException {
+		System.out.println(
+				"Enter the action you'd like: 1) View account information 2) Change username 3) Terminate account");
 		int option = in.nextInt();
 		switch (option) {
 		case 1:
 			getAccount();
 			break;
 		case 2:
-			terminateAccount(account.getAccountName());
+			System.out.println("Enter new username: ");
+			String newUsername = in.next();
+			changeUsername(newUsername);
 			break;
 		case 3:
-			changeUsername();
+			terminateAccount(account.getAccountName());
 			break;
 		}
 	}
-	public void getAccount() {
+
+	public BankAccount getAccount() {
 		System.out.println(account.getAccountName());
 		System.out.println(account.getBalance());
+		return account;
 	}
-	public boolean terminateAccount(String accountName) {
-		if (allAccounts.containsKey(accountName)) {
-			allAccounts.remove(accountName);
-			return true;
-		}
-		System.err.println("Account not found.");
-		return false;
+
+	public void terminateAccount(String accountName) throws IOException {
+
+		BigInteger hashCode = BigInteger.valueOf(getAccountHash(account));
+
+		BigInteger recordNumber = hashCode.and(BigInteger.valueOf(Long.MAX_VALUE));
+
+		String data = "";
+
+		fileData.writeData(recordNumber, data);
+
 	}
-	public void changeUsername() {
-		System.out.println("Enter new username: ");
-		String newUsername = in.next();
 
-		if (allAccounts.containsKey(newUsername)) {
-			System.err.println("Username already exists. Create a different username.");
-			return;
-		}
+	public void changeUsername(String newUsername) throws IOException {
+		BigInteger hashCode = BigInteger.valueOf(getAccountHash(account));
+		BigInteger recordNumber = hashCode.and(BigInteger.valueOf(Long.MAX_VALUE));
+		String balance = String.valueOf(account.getBalance());
+		String data = newUsername + ";" + balance;
 
-		String currentUsername = account.getAccountName();
-		if (allAccounts.containsKey(currentUsername)) {
-			allAccounts.remove(currentUsername);
-			account = new BankAccount(newUsername);
-			allAccounts.put(newUsername, account);
-			System.out.println("Username successfully changed. Your new username is: " + newUsername + ".");
-		} else {
-			System.err.println("Username unable to update.");
-		}
-
-		// Attempt #1 - would've worked if we had setAccountName in BankAccount.java but we only have get
-
-		//		String currentUsername = account.getAccountName();
-		//		if (allAccounts.containsKey(currentUsername)) {
-		//			terminateAccount(currentUsername);
-		//			account.setAccountName(newUsername);
-		//			allAccounts.put(newUsername,  account);
-		//			System.out.println("Username changed successfully to '" + newUsername + "'.");
-		//		} else {
-		//			System.err.println("Username unable to update.");
-		//		}
-		//
-		//		
-		//	}
+		fileData.writeData(recordNumber, data);
+		
 	}
+
 }
