@@ -6,7 +6,7 @@ We suggest running the project with an empty file.txt because it takes on a lot 
 2. Upon logging in, presents the following: deposit, withdraw, transfer, account settings, and exit
 3. Within account settings, presents the following: account information, change username, terminate account
 
-Within each function are various tests to check for functionality. For example, there is a test to determine if terminate account ran properly.
+Within each function are various tests to check for functionality. For example, there is a test to determine if terminate account ran properly. Much of our Menu used scanner, making it difficult to create smooth tests. To account for this, we test throughout the functioning code utilizing plenty of error handling.
 
 Iteration 2:
 - this iteration --> We started off by getting rid of the Handler classes we had in our first iteration. The necessary information from those classes was put into BankAccount. Also, we realized that we ended up pushing code on development, but we went back and created respective branches afterwards and then worked on those branches. We worked on account persistance which involved using a file as a database of sorts. We then used a hashmap to access and maniupulate the accounts. We improved our account manangement by adding options to terminate account, editing their username, as well as logining in and out of accounts. We also updated our "menu screen" to better match the changes. The code does not currently run unfortunately. 
