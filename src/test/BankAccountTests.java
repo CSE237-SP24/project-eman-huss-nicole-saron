@@ -75,14 +75,14 @@ class BankAccountTests {
     // Account tests
 
     @Test
-    void testGetAccountName() {
+    void testGetAccountName() throws IOException {
         BankAccount johnAccount = mainMenu.createAccount("John2");
         String accountName = johnAccount.getAccountName();
         assertEquals("John2", accountName);
     }
 
     @Test
-    void testGetAccountByName() {
+    void testGetAccountByName() throws IOException {
         BankAccount johnAccount = mainMenu.createAccount("John3");
         BankAccount maryAccount = mainMenu.createAccount("Mary");
         BankAccount retrievedAccount = mainMenu.getAccountByName("John3");
@@ -92,7 +92,7 @@ class BankAccountTests {
     }
 
     @Test
-    void testGetAccountByNameNonExistent() {
+    void testGetAccountByNameNonExistent() throws IOException {
         BankAccount johnAccount = mainMenu.createAccount("John4");
         BankAccount maryAccount = mainMenu.createAccount("Mary");
         BankAccount retrievedAccount = mainMenu.getAccountByName("NonExistentAccount");

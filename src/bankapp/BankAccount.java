@@ -48,7 +48,7 @@ public class BankAccount {
 			System.err.println("failed to deposit moneys");
 			return;
 		}
-		System.out.println("deposit successfull");
+		System.out.println("deposit successful");
 	}
 
 	public void withdraw(double amount) {

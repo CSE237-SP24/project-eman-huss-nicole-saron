@@ -1,40 +1,65 @@
 package bankapp;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 
 public class FileData {
-    private final String filePath;
-    private final int recordSize;
+	private final String filePath;
+	private final int recordSize;
 
-    public FileData(String filePath, int recordSize) {
-        this.filePath = filePath;
-        this.recordSize = recordSize;
-    }
+	public FileData(String filePath, int recordSize) {
+		this.filePath = filePath;
+		this.recordSize = recordSize;
+	}
 
-    public void writeData(int recordNumber, String data) throws IOException {
-        try (RandomAccessFile file = new RandomAccessFile(filePath, "rw")) {
-            long offset = calculateOffset(recordNumber);
-            file.seek(offset);
-            byte[] recordData = new byte[recordSize];
-            byte[] dataBytes = data.getBytes(StandardCharsets.UTF_8);
-            System.arraycopy(dataBytes, 0, recordData, 0, Math.min(dataBytes.length, recordSize));
-            file.write(recordData);
-        }
-    }
+	public void writeData(BigInteger recordNumber, String data) throws IOException {
+		try (RandomAccessFile file = new RandomAccessFile(filePath, "rw")) {
+			BigInteger offset = calculateOffset(recordNumber);
+				
+			file.seek(offset.longValue());
 
-    public String readData(int recordNumber) throws IOException {
-        try (RandomAccessFile file = new RandomAccessFile(filePath, "r")) {
-            long offset = calculateOffset(recordNumber);
-            file.seek(offset);
-            byte[] recordData = new byte[recordSize];
-            file.readFully(recordData);
-            return new String(recordData, StandardCharsets.UTF_8).trim();
-        }
-    }
+			
+			byte[] recordData = new byte[recordSize];
+			byte[] dataBytes = data.getBytes(StandardCharsets.UTF_8);
+			System.arraycopy(dataBytes, 0, recordData, 0, Math.min(dataBytes.length, recordSize));
+			file.write(recordData);
+		}
+	}
 
-    private long calculateOffset(int recordNumber) {
-        return (long) (recordNumber - 1) * recordSize;
-    }
+	public String readData(BigInteger recordNumber) throws IOException {
+		try (RandomAccessFile file = new RandomAccessFile(filePath, "r")) {
+			BigInteger offset = calculateOffset(recordNumber);
+			System.out.println("offset: " + offset.longValue());
+
+			file.seek(offset.longValue());
+			
+//			long portionVal = Long.MAX_VALUE;
+//			BigInteger remainingSeek = offset;
+//			while (remainingSeek.signum() > 0) {
+//				long seekSizeTemp = remainingSeek.min(BigInteger.valueOf(portionVal)).longValue();
+//				long seekSize = seekSizeTemp > 0 ? seekSizeTemp : portionVal;
+////				System.out.println("loop seek: "+seekSize);
+//				// file.getFilePointer() is becoming negative :(
+//				file.seek(file.getFilePointer() + seekSize);
+//				remainingSeek = remainingSeek.subtract(BigInteger.valueOf(seekSize));
+//			}
+
+			byte[] recordData = new byte[recordSize];
+			try {
+				file.readFully(recordData);
+				return new String(recordData, StandardCharsets.UTF_8).trim();
+			} catch (EOFException e) {
+				return "";
+			}
+		}
+	}
+
+	private BigInteger calculateOffset(BigInteger recordNumber) {
+		BigInteger offset = recordNumber.subtract(BigInteger.ONE).multiply(BigInteger.valueOf(recordSize));
+		return offset;
+	}
+
 }

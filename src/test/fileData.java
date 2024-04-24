@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 import java.io.IOException;
+import java.math.BigInteger;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,8 @@ class fileData {
 	    Menu mainMenu = new Menu();
 
 	    BankAccount test = mainMenu.createAccount("John");
-	    int lineNumber = mainMenu.getAccountHash(test);
+		BigInteger hashCode = BigInteger.valueOf(mainMenu.getAccountHash(test));
+		BigInteger lineNumber = hashCode.and(BigInteger.valueOf(Long.MAX_VALUE));
 	    String writtenData = String.valueOf(lineNumber);
 	    
 	    // Writing
@@ -44,8 +46,9 @@ class fileData {
 	 @Test
 	    void testWriteAndReadData() throws IOException {
 	        String data = "This is a test record";
-	        int recordNumber = 1;
-
+	        int recordNumber1 = 1;
+			BigInteger hashCode = BigInteger.valueOf(recordNumber1);
+			BigInteger recordNumber = hashCode.and(BigInteger.valueOf(Long.MAX_VALUE));
 	        fileData.writeData(recordNumber, data);
 	        String readData = fileData.readData(recordNumber);
 
@@ -56,8 +59,11 @@ class fileData {
 	    void testUpdateData() throws IOException {
 	        String initialData = "Initial data";
 	        String updatedData = "Updated data";
-	        int recordNumber = 2;
+	        //int recordNumber = 2;
 
+			BigInteger hashCode = BigInteger.valueOf(2);
+			BigInteger recordNumber = hashCode.and(BigInteger.valueOf(Long.MAX_VALUE));
+	        
 	        fileData.writeData(recordNumber, initialData);
 	        String readData = fileData.readData(recordNumber);
 	        assertEquals(initialData, readData.trim());
@@ -74,31 +80,34 @@ class fileData {
 	        String record3Data = "Record 3";
 	        String updatedRecord2Data = "Updated Record 2";
 
-	        fileData.writeData(1, record1Data);
-	        fileData.writeData(2, record2Data);
-	        fileData.writeData(3, record3Data);
+			BigInteger hashCode = BigInteger.valueOf(2);
+			BigInteger recordNumber = hashCode.and(BigInteger.valueOf(Long.MAX_VALUE));
+	        
+	        fileData.writeData(BigInteger.valueOf(1), record1Data);
+	        fileData.writeData(BigInteger.valueOf(2), record2Data);
+	        fileData.writeData(BigInteger.valueOf(3), record3Data);
 
-	        fileData.writeData(2, updatedRecord2Data);
+	        fileData.writeData(BigInteger.valueOf(4), updatedRecord2Data);
 
-	        assertEquals(record1Data, fileData.readData(1).trim());
-	        assertEquals(updatedRecord2Data, fileData.readData(2).trim());
-	        assertEquals(record3Data, fileData.readData(3).trim());
+	        assertEquals(record1Data, fileData.readData(BigInteger.valueOf(1)).trim());
+	        assertEquals(updatedRecord2Data, fileData.readData(BigInteger.valueOf(2)).trim());
+	        assertEquals(record3Data, fileData.readData(BigInteger.valueOf(3)).trim());
 	    }
 
 	    @Test
 	    void testReadDataFromEmptyRecord() throws IOException {
-	        int emptyRecordNumber = 5;
-	        String readData = fileData.readData(emptyRecordNumber);
+		
+	        String readData = fileData.readData(BigInteger.valueOf(5));
 	        assertEquals("", readData.trim());
 	    }
 
 	    @Test
 	    void testWriteDataExceedingRecordSize() throws IOException {
 	        String longData = "This is a very long data that exceeds the record size";
-	        int recordNumber = 4;
 
-	        fileData.writeData(recordNumber, longData);
-	        String readData = fileData.readData(recordNumber);
+	        
+	        fileData.writeData(BigInteger.valueOf(4), longData);
+	        String readData = fileData.readData(BigInteger.valueOf(4));
 
 	        assertEquals(longData.substring(0, RECORD_SIZE), readData.trim());
 	    }

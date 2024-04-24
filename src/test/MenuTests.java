@@ -36,7 +36,7 @@ class MenuTests {
 //	}
 
 	@Test
-	void testTerminateAccount() {
+	void testTerminateAccount() throws IOException {
 		Menu m = new Menu();
 		m.createAccount("John");
 		assertTrue(m.terminateAccount("John"));
