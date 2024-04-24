@@ -59,22 +59,23 @@ public class BankAccount {
 		System.out.println("withdraw succeeded");
 	}
 
-	public void transfer(BankAccount receivingAccount, double amount) {
+	public boolean transfer(BankAccount receivingAccount, double amount) {
 		if (!this.removeBalance(amount)) {
 			System.err.println("transfer failed: an error in your balance");
-			return;
+			return false;
 		}
 
 		if (receivingAccount == null || receivingAccount.accountName.isBlank()) {
 			System.err.println("transfer failed: receiving account not found :(");
-			return;
+			return false;
 		}
 
 		if (!receivingAccount.addBalance(receivingAccount, amount)) {
 			System.err.println("transfer failed: an error in the receivingAccount's balance");
+			return false;
 		}
-
 		System.out.println("transfer success");
+		return true;
 	}
 
 	// ******************** TRANSACTION ERROR HANDLERS ********************//

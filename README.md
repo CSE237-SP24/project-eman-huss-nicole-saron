@@ -1,7 +1,12 @@
 # base-project
 Iteration 2:
+<<<<<<< HEAD
+- this iteration --> We started off by getting rid of the Handler classes we had in our first iteration. The necessary information from those classes was put into BankAccount.We worked on account persistance which involved using a file as a database of sorts. We then used a hashmap to access and maniupulate the accounts. We improved our account manangement by adding options to terminate account, editing their username, as well as logining in and out of accounts. We also updated our "menu screen" to better match the changes. 
+- next iteration --> we want to do more test cases. We want to make it so that readData() and writeData() retrieve/write one account at a time from the file to improve security and efficiency. We're unsure of how the File.java class was used in the files lecture, and how to utilize it inout code. We think it'd be where we'd check if a file exists, but not sure what else it'd do. We would also like to add account types such as savings vs checkings.  
+=======
 - this iteration --> We started off by getting rid of the Handler classes we had in our first iteration. The necessary information from those classes was put into BankAccount. Also, we realized that we ended up pushing code on development, but we went back and created respective branches afterwards and then worked on those branches. We worked on account persistance which involved using a file as a database of sorts. We then used a hashmap to access and maniupulate the accounts. We improved our account manangement by adding options to terminate account, editing their username, as well as logining in and out of accounts. We also updated our "menu screen" to better match the changes. The code does not currently run unfortunately. 
 - next iteration -->  First we want to work on our code so that things run. We also want to do more test cases. We want to make it so that readData() and writeData() retrieve/write one account at a time from the file to improve security and efficiency. We're unsure of how the File.java class was used in the files lecture, and how to utilize it inout code. We think it'd be where we'd check if a file exists, but not sure what else it'd do. We would also like to add account types such as savings vs checkings.  
+>>>>>>> branch 'development' of https://github.com/CSE237-SP24/project-eman-huss-nicole-saron.git
 - things that currently don't work: terminate account test case, login and logout aren't in Menu yet, ...
 - our script is the same as before!
 - 

@@ -1,6 +1,7 @@
 package test;
-
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +13,7 @@ class MenuTests {
 	// need  more tests
 	
 	@Test
-	void testUserDeposit() {
+	void testUserDeposit() throws IOException {
 		Menu m = new Menu();
 		m.createAccount("Nicole");
 		//user has provided value input of 50

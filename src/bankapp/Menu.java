@@ -1,7 +1,6 @@
 package bankapp;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.InputMismatchException;
@@ -33,7 +32,7 @@ public class Menu {
 		return (account.getAccountName()).hashCode();
 	}
 		// not tested
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void main(String[] args) throws IOException {
 		
 		// test account to transfer money to
 		
@@ -113,7 +112,12 @@ public class Menu {
 		int logininput = in.nextInt();
 		if (logininput == 1) { //have an account and are signing in
 			System.err.println("Welcome back! Please enter username.");
-			account = allAccounts.get(in.next());
+			String tempUsername = in.next();
+			if (!allAccounts.containsKey(tempUsername)) {
+				System.err.println("This account name does not exist.");
+				displayingLoginOptions();
+			}
+			account = allAccounts.get(tempUsername);
 		} else {
 			System.err.println("Welcome! Please create an account by providing a username.");
 			BankAccount newAccount = createAccount(in.next());
@@ -167,7 +171,7 @@ public class Menu {
 	}
 
 	// Does work - needs tests
-	public void processingUserSelection(int task) {
+	public void processingUserSelection(int task) throws IOException {
 		switch (task) {
 		case 1:
 			processingDeposit();
@@ -200,7 +204,7 @@ public class Menu {
 
 	}
 
-	public void processingTransfer() {
+	public void processingTransfer() throws IOException {
 		System.out.println("Enter the name of the account to transfer to");
 		String receivingAccountName = in.next();
 //		BankAccount receivingAccount = getAccountByName(receivingAccountName);
