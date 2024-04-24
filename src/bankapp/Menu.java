@@ -73,28 +73,43 @@ public class Menu {
 		fileData.writeData(recordNumber, data);
 	}
 
-	private String readData(BankAccount account) throws IOException {
-		int recordNumber = getAccountHash(account);
+	private boolean readData(String accountName) throws IOException { //login
+		int recordNumber = accountName.hashCode();
 		String readData = fileData.readData(recordNumber);
-		return readData;
+		if (readData.isBlank()) {
+			return false;
+		}
+		String[] parts = readData.split(";");
+		accountName = parts[0];
+		int balance = Integer.parseInt(parts[1]);
 		
-//		Scanner in = new Scanner (f);
-//		while (in.hasNextLine()) {
-//			String name = in.next();
-//			double balance = in.nextDouble();
-//			BankAccount account = new BankAccount(name); 
-//			account.deposit(balance);
-//			allAccounts.put(name, account);
-//		}
-//
-//		in.close();
+		account = createAccount(accountName);
+		account.deposit(balance);
+		return true;
 	}
+	
+	private BankAccount readSecondAccount(String accountName) throws IOException { //transfer
+		int recordNumber = accountName.hashCode();
+		String readData = fileData.readData(recordNumber);
+		if (readData.isBlank()) {
+			return null;
+		}
+		String[] parts = readData.split(";");
+		accountName = parts[0];
+		int balance = Integer.parseInt(parts[1]);
+		
+		BankAccount secondAccount = createAccount(accountName);
+		secondAccount.deposit(balance);
+		return secondAccount;
+	}
+	
 
 
 
 	//	login or sign up
 	public void displayingLoginOptions() {
 		System.out.println("If you have an account with us, please press one. Otherwise, press two.: 1) Log in 2)Sign up");
+		
 		int logininput = in.nextInt();
 		if (logininput == 1) { //have an account and are signing in
 			System.err.println("Welcome back! Please enter username.");
@@ -188,13 +203,17 @@ public class Menu {
 	public void processingTransfer() {
 		System.out.println("Enter the name of the account to transfer to");
 		String receivingAccountName = in.next();
-		BankAccount receivingAccount = getAccountByName(receivingAccountName);
+//		BankAccount receivingAccount = getAccountByName(receivingAccountName);
+		BankAccount receivingAccount = readSecondAccount(receivingAccountName);
 		if (receivingAccount == null) {
 			System.out.println("Invalid account name. Transfer failed.");
 			return;
 		}
 		double amount = validMoneyInput();
-		account.transfer(receivingAccount, amount);
+		if (account.transfer(receivingAccount, amount)) {
+			writeData(account);
+			writeData(receivingAccount);
+		}
 	}
 
 	public void processingWithdraw() {
@@ -212,16 +231,17 @@ public class Menu {
 			getAccount();
 			break;
 		case 2:
-			terminateAccount(account.getAccountName());
+			changeUsername();
 			break;
 		case 3:
-			changeUsername();
+			terminateAccount(account.getAccountName());
 			break;
 		}
 	}
-	public void getAccount() {
+	public BankAccount getAccount() {
 		System.out.println(account.getAccountName());
 		System.out.println(account.getBalance());
+		return account;
 	}
 	public boolean terminateAccount(String accountName) {
 		if (allAccounts.containsKey(accountName)) {
