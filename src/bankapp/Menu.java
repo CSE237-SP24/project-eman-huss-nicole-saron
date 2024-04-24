@@ -119,8 +119,8 @@ public class Menu {
 
 	// login or sign up
 	public void displayingLoginOptions() throws IOException {
-		System.out.println(
-				"If you have an account with us, please press one. Otherwise, press two:\n1)Log in 2)Sign up");
+		System.out
+				.println("If you have an account with us, please press one. Otherwise, press two:\n1)Log in 2)Sign up");
 		try {
 			int logininput = in.nextInt();
 
@@ -142,10 +142,10 @@ public class Menu {
 			}
 
 			else if (logininput == 2) {
-					System.out.println("Welcome! Please create an account by providing a username.");
-					while (true){
+				System.out.println("Welcome! Please create an account by providing a username.");
+				while (true) {
 					account = createAccount(in.next());
-					if(account == null) {
+					if (account == null) {
 						System.err.println("error making the account try again");
 					} else {
 						break;
@@ -264,7 +264,7 @@ public class Menu {
 		writeData(account);
 	}
 
-	public void accountSettings() {
+	public void accountSettings() throws IOException {
 		System.out.println(
 				"Enter the action you'd like: 1) View account information 2) Change username 3) Terminate account");
 		int option = in.nextInt();
@@ -287,13 +287,16 @@ public class Menu {
 		return account;
 	}
 
-	public boolean terminateAccount(String accountName) {
-		if (allAccounts.containsKey(accountName)) {
-			allAccounts.remove(accountName);
-			return true;
-		}
-		System.err.println("Account not found.");
-		return false;
+	public void terminateAccount(String accountName) throws IOException {
+
+		BigInteger hashCode = BigInteger.valueOf(getAccountHash(account)); // line number
+
+		BigInteger recordNumber = hashCode.and(BigInteger.valueOf(Long.MAX_VALUE));
+
+		String data = "";
+
+		fileData.writeData(recordNumber, data);
+
 	}
 
 	public void changeUsername() {
@@ -315,22 +318,7 @@ public class Menu {
 			System.err.println("Username unable to update.");
 		}
 
-		// Attempt #1 - would've worked if we had setAccountName in BankAccount.java but
-		// we only have get
-
-		// String currentUsername = account.getAccountName();
-		// if (allAccounts.containsKey(currentUsername)) {
-		// terminateAccount(currentUsername);
-		// account.setAccountName(newUsername);
-		// allAccounts.put(newUsername, account);
-		// System.out.println("Username changed successfully to '" + newUsername +
-		// "'.");
-		// } else {
-		// System.err.println("Username unable to update.");
-		// }
-		//
-		//
-		// }
+		
 	}
 
 	public void clearAllAccountInfo() throws IOException {

@@ -1,4 +1,5 @@
 package test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
@@ -10,18 +11,18 @@ import bankapp.Menu;
 
 class MenuTests {
 
-	// need  more tests
-	
+	// need more tests
+
 	@Test
 	void testUserDeposit() throws IOException {
 		Menu m = new Menu();
 		m.createAccount("Nicole");
-		//user has provided value input of 50
+		// user has provided value input of 50
 		m.processingUserSelection(1);
 		BankAccount account = m.getAccount();
 		assertEquals(50, account.getBalance(), 0.01);
 	}
-	
+
 //	@Test
 //	void testMultipleUserDeposit() {
 //		Menu m = new Menu();
@@ -36,14 +37,28 @@ class MenuTests {
 //	}
 
 	@Test
+
 	void testTerminateAccount() throws IOException {
+
 		Menu m = new Menu();
+
 		m.createAccount("John");
-		assertTrue(m.terminateAccount("John"));
+
+		m.terminateAccount("John");
+
+		assertFalse(m.readData("John"));
+
 	}
+
 	@Test
-	void testTerminateNonExistentAccount() {
+
+	void testTerminateNonExistentAccount() throws IOException {
+
 		Menu m = new Menu();
-		assertFalse(m.terminateAccount("John"));
+
+		m.terminateAccount("John");
+
+		assertFalse(m.readData("John"));
+
 	}
 }
